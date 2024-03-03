@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent {
+  @Input() products ='';
   items: { name: string, id: number, price: number }[] = [];
 
   constructor() {
