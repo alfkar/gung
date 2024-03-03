@@ -1,6 +1,6 @@
 <div>
   <h2>List of Items (Table Component)</h2>
-  <table>
+  <table class="table">
     <thead>
       <tr>
         <th>Name</th>
@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of items">
+      <tr scope="row" *ngFor="let item of items">
         <td>{{ item.name }}</td>
         <td>{{ item.id}}</td>
         <td>{{ item.price}}</td>
