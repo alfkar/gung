@@ -1,5 +1,5 @@
 <div>
-  <h2>List of Items (Table Component)</h2>
+  <h2></h2>
   <table class="table">
     <thead>
       <tr>
@@ -9,10 +9,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr scope="row" *ngFor="let item of items">
-        <td>{{ item.name }}</td>
-        <td>{{ item.id}}</td>
-        <td>{{ item.price}}</td>
+      <tr scope="row" *ngFor="let product of products">
+        <td>{{ product.name }}</td>
+        <td>{{ product.id}}</td>
+        <td>{{ product.extra.AGA.PRI}}</td>
       </tr>
     </tbody>
   </table>
