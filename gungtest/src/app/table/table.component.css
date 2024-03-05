@@ -21,3 +21,6 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #ddd;
 }
+.viewport {
+    height: 800px;
+}

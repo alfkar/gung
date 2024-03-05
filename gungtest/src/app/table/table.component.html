@@ -1,21 +1,29 @@
 <div>
-  <h2></h2>
+  <cdk-virtual-scroll-viewport itemSize="10" minBufferPx="200" class="viewport">
   <table class="table">
     <thead>
       <tr>
-
         <th>Name</th>
         <th>ID</th>
         <th>Price</th>
+        <th>Stock</th>
+        <th (click)="sortProductsByVolume()">Volume</th>
+        <th>Category</th>
       </tr>
     </thead>
-    <tbody>
-      <tr scope="row" *ngFor="let product of products">
-        <td>{{ product.name }}</td>
-        <td>{{ product.id}}</td>
-        <td>{{ product.extra.AGA.PRI}}</td>
-      </tr>
-    </tbody>
+      <tbody>
+        <ng-container >
+          <tr *cdkVirtualFor="let product of products" scope="row">
+            <td>{{ product.name }}</td>
+            <td>{{ product.id}}</td>
+            <td>{{ product.extra.AGA.PRI}}</td>
+            <td>{{ product.extra.AGA.LGA}}</td>
+            <td>{{ product.extra.AGA.VOL}}</td>
+            <td>{{ product.categoryName}}</td>
+          </tr>
+        </ng-container>
+      </tbody>
   </table>
+  </cdk-virtual-scroll-viewport>
 </div>
 
