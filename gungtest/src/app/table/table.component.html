@@ -7,7 +7,11 @@
         <th>ID</th>
         <th>Price</th>
         <th>Stock</th>
-        <th (click)="sortProductsByVolume()">Volume</th>
+        <th (click)="sortProductsByVolume()">
+          Volume
+          <span *ngIf="sortingState === 'ascending'">&#x25B2;</span> <!-- Up arrow when sorted ascending -->
+          <span *ngIf="sortingState === 'descending'">&#x25BC;</span> <!-- Down arrow when sorted descending -->
+        </th>
         <th>Category</th>
       </tr>
     </thead>

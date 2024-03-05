@@ -13,20 +13,31 @@ import { ProductWithCategory } from '../app.component';
 })
 export class TableComponent implements OnInit {
   @Input() products: ProductWithCategory[] = []; // Receive the products array from the parent
-
+  defaultState: ProductWithCategory[] = [];
+  sortingState: 'ascending' | 'descending' | 'neutral' = 'neutral';  
   constructor() {}
 
   ngOnInit() {
     // Use the received products array in the child component
+    this.defaultState = [...this.products];
     console.log('Received products:', this.products);
   }
   sortProductsByVolume() {
-    this.products.sort((a, b) => {
-      if (a.extra.AGA.VOL< b.extra.AGA.VOL) return -1;
-      if (a.extra.AGA.VOL > b.extra.AGA.VOL) return 1;
-      return 0;
-    });
-    console.log("Products should be sorted");
-    console.log(this.products);
+    switch (this.sortingState) {
+      case 'ascending':
+        this.sortingState = 'descending';
+        this.products.sort((a, b) => b.extra.AGA.VOL - a.extra.AGA.VOL);
+        break;
+      case 'descending':
+        this.sortingState = 'neutral';
+        this.products = [...this.defaultState];
+        break;
+      default:
+        this.sortingState = 'ascending';
+        this.products.sort((a, b) => a.extra.AGA.VOL - b.extra.AGA.VOL);
+        break;
+    }
+    this.products = [...this.products];
+    console.log("Products sorted by volume:", this.products);
   }
 }
