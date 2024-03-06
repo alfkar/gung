@@ -1,3 +1,19 @@
-.container{
-  text-align: center;
+.gung-img{
+  margin-left: 1em;
 }
+
+
+.orange-background {
+    font-size: 16px;
+    background-color: orange;
+    padding: 15px 20px;
+    border-radius: 25px;
+    color: black;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    line-height: 1.5em;
+    text-transform: uppercase;
+    margin-right: 1em;
+}
+
