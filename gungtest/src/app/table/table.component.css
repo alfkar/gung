@@ -1,27 +1,68 @@
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+.table-container {
+  /* Ensure that the table container has a fixed height and overflow-y set to auto for scrolling */
+  height: 1000px; /* Adjust this height as needed */
+  overflow-y: auto;
 }
-th {
-  background-color: #f2f2f2;
+/* Set the position of the thead element to sticky */
+thead {
+  position: sticky;
+  top: 0; /* Stick to the top of the table */
+  z-index: 1; /* Ensure the headers are above other content */
+  background-color: #333; /* Background color for headers */
+}th {
   cursor: pointer;
   user-select: none;
 }
-
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-tr:hover {
-  background-color: #ddd;
+th:nth-child(2), th:nth-child(3) {
+  width: 250px;
 }
 .viewport {
-    height: 800px;
+    height: 1000px;
+}
+.header-content {
+  display: inline-block; /* Display the div and button inline */
+  margin-right: 10px; /* Adjust margin as needed for spacing between elements */
+}
+.form-check,
+.form-switch{
+  width: auto;
+}
+.search-click {
+  background: url("../../assets/search.png") no-repeat left scroll;
+  background-color: white;
+  border: 1px solid #ccc;
+  outline: none;
+  background-size: 13px;
+  background-position-x: 3px;
+  border-radius: 13px;
+  width: 0px;
+  height: 30px;
+  transition: all 0.5s;
+  padding-left: 18px;
+  position: fixed;
+  overflow: hidden;
+  height: 20px;
+}
+
+.search-click:hover,
+.search-click:focus,
+input:not(.form-check-input):not(:placeholder-shown) {
+  width: 150px; /* Ensure the width stays expanded */
+}
+
+.search-click {
+  position: relative;
+  overflow: hidden;
+  height: 20px;
+}
+.search-click input {
+  background: transparent;
+  border: 1px solid #ccc;
+  outline: none;
+  position: absolute;
+  width: calc(100% - 30px); /* Adjust as needed */
+  height: 20px;
+  left: 30px; /* Adjust as needed */
+  top: 5px; /* Adjust as needed */
 }

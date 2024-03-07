@@ -43,6 +43,9 @@ export class AppComponent implements OnInit {
         if (product != null){
           this.prod = { ...product, categoryId: parentCategory,categoryName: categoryNames };
           this.products.push(this.prod);
+          this.products.push(this.prod);
+          this.products.push(this.prod);
+          this.products.push(this.prod);
         }
         else{
           this.prod = {
@@ -61,5 +64,4 @@ export class AppComponent implements OnInit {
 export interface ProductWithCategory extends Product{
   categoryId?: string[];
   categoryName?: string;
-
 }
