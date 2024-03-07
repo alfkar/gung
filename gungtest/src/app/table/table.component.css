@@ -28,6 +28,47 @@ th:nth-child(2), th:nth-child(3) {
 .form-switch{
   width: auto;
 }
+
+.popup-container {
+  position: relative;
+}
+.icon-button {
+  width: 20px;
+  height: 20px;
+  background-image: url('../../assets/filter.png');
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat; /* Prevent the background image from repeating */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.popup {
+  position: absolute;
+  top: 30px; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border-radius: 20px;
+  border: 1px solid black;
+  padding: 5px;
+  width: 200px;
+  z-index: 999;
+}
+
+.volume-range {
+  background-color: white;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 13px;
+  width: 100%; /* Adjust width as needed */
+  height: 30px;
+  padding-left: 7px;
+  margin-bottom: 10px; /* Adjust margin as needed */
+}
+
+
 .search-click {
   background: url("../../assets/search.png") no-repeat left scroll;
   background-color: white;
@@ -47,7 +88,7 @@ th:nth-child(2), th:nth-child(3) {
 
 .search-click:hover,
 .search-click:focus,
-input:not(.form-check-input):not(:placeholder-shown) {
+input:not(.volume-range):not(.form-check-input):not(:placeholder-shown) {
   width: 150px; /* Ensure the width stays expanded */
 }
 

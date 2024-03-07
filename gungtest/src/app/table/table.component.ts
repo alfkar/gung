@@ -4,13 +4,14 @@ import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrollin
 import { ProductWithCategory } from '../app.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
+import {MatSliderModule} from '@angular/material/slider';
 @Component({
   selector: 'app-table',
   standalone: true,
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
   changeDetection: ChangeDetectionStrategy.Default,
-  imports: [CommonModule, ScrollingModule, CdkVirtualScrollViewport, MatProgressSpinnerModule, FormsModule]
+  imports: [CommonModule, ScrollingModule, CdkVirtualScrollViewport, MatProgressSpinnerModule, FormsModule, MatSliderModule]
 })
 
 export class TableComponent implements OnInit {
@@ -23,12 +24,25 @@ export class TableComponent implements OnInit {
   idFilter: string = '';
   priceFilter: number;
   showOnlyInStock: boolean = false;
+  showPopup: boolean = false;
+  lowerbound: number;
+  upperbound: number;
+  alotOfData: boolean = false;
+  threshold: number = 1000;
   constructor() {}
 
   ngOnInit() {
     this.defaultState = [...this.products];
     console.log('Received products:', this.products);
     this.initializeSortingStates(); // Initialize sorting states
+    if(this.defaultState.length > this.threshold){
+      this.alotOfData = true;
+    }
+  }
+
+  togglePopup(event: Event) {
+    event.stopPropagation(); // Stop the propagation of the click event
+    this.showPopup = !this.showPopup;
   }
 
   initializeSortingStates() {
@@ -36,55 +50,59 @@ export class TableComponent implements OnInit {
     this.sortingStates['stock'] = 'neutral'; // Initialize stock sorting state
     this.sortingStates['category'] = 'neutral';
   }
-  applyFilters(name: string, category: string, id: string, price: number) {
-    if(!name && !category && !id && !price && !this.showOnlyInStock){
-      this.products = [...this.defaultState];
-      return;
-    }
-    let filteredByName = this.filterByName(name);
-    let filteredByCategory = this.filterByCategory(category);
-    let filteredById = this.filterById(id);
-    let filteredByPrice = this.filterByPrice(price);
-    let filteredByStock = this.filterInStock();
-    // Intersect filtered arrays to get the final result
-    this.products= this.intersectArrays(filteredByName, filteredByCategory, filteredById, filteredByPrice, filteredByStock);
-  }
-  filterInStock(): ProductWithCategory[]{
-    if(!this.showOnlyInStock) return this.defaultState;
-    return this.defaultState.filter(product =>
-    product.extra && product.extra.AGA && Number(product.extra.AGA.LGA) > 0
-    );
-  }
-  toggleInStockFilter(){
-    this.showOnlyInStock = !this.showOnlyInStock;
-    this.applyFilters(this.nameFilter, this.categoryFilter, this.idFilter, this.priceFilter);
-  }
 
-  filterByName(name: string): ProductWithCategory[] {
-    if (!name) return this.defaultState; // If volume is empty, return all products
-    return this.defaultState.filter(product =>
-      product.name.toString().toLowerCase().includes(name.toLowerCase())
-    );
+    applyFilters() {
+      // Apply filters based on current filter settings
+      let filteredProducts = this.defaultState.slice(); // Copy the original products array
+      // Apply filters based on the current filter settings
+      filteredProducts = filteredProducts.filter(product =>
+        this.filterInStock(product) &&
+        this.filterByVolume(product, this.lowerbound, this.upperbound) &&
+        this.filterByName(product, this.nameFilter) &&
+        this.filterByCategory(product, this.categoryFilter) &&
+        this.filterById(product, this.idFilter) &&
+        this.filterByPrice(product, this.priceFilter)
+      );
+
+      // Update the displayed products
+      this.products = filteredProducts;
+    }
+
+    filterInStock(product: ProductWithCategory): boolean {
+      return !this.showOnlyInStock || (product.extra && product.extra.AGA && Number(product.extra.AGA.LGA) > 0);
+    }
+
+    filterByVolume(product: ProductWithCategory, lowerbound: number, upperbound: number): boolean {
+      lowerbound = lowerbound || 0; // Default lowerbound to 0 if not provided
+      upperbound = upperbound || Number.MAX_VALUE; // Default upperbound to max value if not provided
+
+      return product.extra && product.extra.AGA && product.extra.AGA.VOL &&
+        Number(product.extra.AGA.VOL) >= lowerbound && Number(product.extra.AGA.VOL) <= upperbound;
+    }
+
+    filterByName(product: ProductWithCategory, name: string): boolean {
+      return !name || product.name.toLowerCase().includes(name.toLowerCase());
+    }
+
+
+    filterByCategory(product: ProductWithCategory, category: string): boolean {
+      if (!category) {
+        return true; // Return true to include all products when category is not provided
+      } else {
+        return (product.categoryName && product.categoryName.toLowerCase().includes(category.toLowerCase())) || false;
+      }
+    }
+
+    filterById(product: ProductWithCategory, id: string): boolean {
+      return !id || product.id.toLowerCase().includes(id.toLowerCase());
+    }
+
+    filterByPrice(product: ProductWithCategory, price: number): boolean {
+      return !price || (product.extra && product.extra.AGA && product.extra.AGA.PRI && Number(product.extra.AGA.PRI) >= price);
+    }
+    toggleInStockFilter(){
   }
-  filterByCategory(category: string): ProductWithCategory[] {
-    if (!category) return this.defaultState; // If category is empty, return all products
-    return this.defaultState.filter(product =>
-      product.categoryName && product.categoryName.toLowerCase().includes(category.toLowerCase())
-    );
-  }
-  filterById(id: string): ProductWithCategory[] {
-    if (!id) return this.defaultState; // If category is empty, return all products
-    return this.defaultState.filter(product =>
-      product.id.toLowerCase().includes(id.toLowerCase())
-    );
-  }
-  filterByPrice(price: number): ProductWithCategory[] {
-    if (!price) return this.defaultState; // If price is empty, return all products
-    return this.defaultState.filter(product =>
-      product.extra && product.extra.AGA && product.extra.AGA.PRI && Number(product.extra.AGA.PRI) >= price
-    );
-  }
-  intersectArrays(...arrays: ProductWithCategory[][]): ProductWithCategory[] {
+    intersectArrays(...arrays: ProductWithCategory[][]): ProductWithCategory[] {
     // Intersect arrays to get the common elements
     if (arrays.length === 0) return [];
     if (arrays.length === 1) return arrays[0];
