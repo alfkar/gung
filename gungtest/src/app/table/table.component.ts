@@ -44,7 +44,16 @@ export class TableComponent implements OnInit {
     event.stopPropagation(); // Stop the propagation of the click event
     this.showPopup = !this.showPopup;
   }
-
+  filterButton(event: Event){
+    event.stopPropagation();
+    this.applyFilters();
+  }
+  onKeyDown(event: KeyboardEvent) {
+    console.log("PressedKey: {}",event.key);
+    if (event.key === 'Enter') { // Replace 'Enter' with your desired key
+      this.applyFilters(); // Call your button click function here
+    }
+  }
   initializeSortingStates() {
     this.sortingStates['volume'] = 'neutral'; // Initialize volume sorting state
     this.sortingStates['stock'] = 'neutral'; // Initialize stock sorting state

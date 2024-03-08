@@ -13,9 +13,11 @@ thead {
 }th {
   cursor: pointer;
   user-select: none;
+  width: 300px;
 }
-th:nth-child(2), th:nth-child(3) {
-  width: 250px;
+th:nth-child(6){
+  width: 400px; 
+
 }
 .viewport {
     height: 1000px;
@@ -27,6 +29,25 @@ th:nth-child(2), th:nth-child(3) {
 .form-check,
 .form-switch{
   width: auto;
+}
+.apply-filters {
+  font-size: 14px;
+  background-color: #e48b00;
+  border-radius: 25px;
+  color: black;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  line-height: 1.5em;
+  text-transform: uppercase;
+  margin-right: 1em;
+  float: right;
+  background-color: #e48b00; /* Green color */
+  color: black;
+  margin-right: 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .popup-container {

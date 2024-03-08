@@ -1,11 +1,14 @@
 .gung-img{
   margin-left: 1em;
 }
-
+.parent-container{
+  position: fixed;
+  width: 100%
+}
 
 .orange-background {
     font-size: 16px;
-    background-color: orange;
+    background-color: #e48b00;
     padding: 15px 20px;
     border-radius: 25px;
     color: black;

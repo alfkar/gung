@@ -12,7 +12,7 @@
           <input type="text" class="search-click" placeholder="" id="idFilter" [(ngModel)]="idFilter" (input)="applyFilters()">
           </th>
           <th>Price
-          <input type="number" class="search-click" placeholder="" id="priceFilter" [(ngModel)]="priceFilter" (input)="applyFilters()">
+          <input type="text" class="search-click" placeholder="" id="priceFilter" [(ngModel)]="priceFilter" (input)="applyFilters()">
           </th>
           <th (click)="sortProductsByVolume()">
            <div class="d-flex align-items-center">
@@ -66,7 +66,7 @@
   </cdk-virtual-scroll-viewport>
 </div>
 
-<div *ngIf="alotOfData">
+<div *ngIf="alotOfData" (keydown)="onKeyDown($event)">
   <cdk-virtual-scroll-viewport itemSize="10" minBufferPx="200" class="viewport">
     <div class="table-container">
     <table class="table table-striped table-dark">
@@ -79,7 +79,7 @@
           <input type="text" class="search-click" placeholder="" id="idFilter" [(ngModel)]="idFilter" >
           </th>
           <th>Price
-          <input type="number" class="search-click" placeholder="" id="priceFilter" [(ngModel)]="priceFilter">
+          <input type="text" class="search-click" placeholder="" id="priceFilter" [(ngModel)]="priceFilter">
           </th>
           <th (click)="sortProductsByVolume()">
            <div class="d-flex align-items-center">
@@ -107,14 +107,14 @@
               </div>
             </div>
           </th>
-          <th (click)="sortProductsByCategory()">
-             Category
+          <th (click)="sortProductsByCategory()">  Category
             <span *ngIf="sortingStates['category'] === 'ascending'">&#x25B2;</span>
             <span *ngIf="sortingStates['category'] === 'descending'">&#x25BC;</span>
             <input type="text" class="search-click" placeholder="" id="categoryFilter" [(ngModel)]="categoryFilter" (click)="$event.stopPropagation()">
+            <button class="apply-filters" (click)="filterButton($event)">Apply Filters</button>
           </th>
+          
         </tr>
-        <button (click)="applyFilters()">Apply Filters</button>
       </thead>
       <tbody>
         <ng-container >
