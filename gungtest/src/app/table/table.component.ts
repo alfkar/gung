@@ -25,9 +25,9 @@ export class TableComponent implements OnInit {
   priceFilter: number;
   showOnlyInStock: boolean = false;
   showPopup: boolean = false;
-  lowerbound: number;
-  upperbound: number;
-  alotOfData: boolean = false;
+  lowerBound: number;
+  upperBound: number;
+  aLotOfData: boolean = false;
   threshold: number = 1000;
   constructor() {}
 
@@ -36,7 +36,7 @@ export class TableComponent implements OnInit {
     console.log('Received products:', this.products);
     this.initializeSortingStates(); // Initialize sorting states
     if(this.defaultState.length > this.threshold){
-      this.alotOfData = true;
+      this.aLotOfData = true;
     }
   }
 
@@ -60,13 +60,24 @@ export class TableComponent implements OnInit {
     this.sortingStates['category'] = 'neutral';
   }
 
+  clearFilters(){
+    this.initializeSortingStates();
+    this.categoryFilter = '';
+    this.nameFilter = '';
+    this.idFilter = '';
+    this.priceFilter;
+    this.showOnlyInStock = false;
+    this.showPopup = false;
+    this.lowerBound;
+    this.upperBound;
+  }
     applyFilters() {
       // Apply filters based on current filter settings
       let filteredProducts = this.defaultState.slice(); // Copy the original products array
       // Apply filters based on the current filter settings
       filteredProducts = filteredProducts.filter(product =>
         this.filterInStock(product) &&
-        this.filterByVolume(product, this.lowerbound, this.upperbound) &&
+        this.filterByVolume(product, this.lowerBound, this.upperBound) &&
         this.filterByName(product, this.nameFilter) &&
         this.filterByCategory(product, this.categoryFilter) &&
         this.filterById(product, this.idFilter) &&
@@ -81,12 +92,12 @@ export class TableComponent implements OnInit {
       return !this.showOnlyInStock || (product.extra && product.extra.AGA && Number(product.extra.AGA.LGA) > 0);
     }
 
-    filterByVolume(product: ProductWithCategory, lowerbound: number, upperbound: number): boolean {
-      lowerbound = lowerbound || 0; // Default lowerbound to 0 if not provided
-      upperbound = upperbound || Number.MAX_VALUE; // Default upperbound to max value if not provided
+    filterByVolume(product: ProductWithCategory, lowerBound: number, upperBound: number): boolean {
+      lowerBound = lowerBound || 0; // Default lowerbound to 0 if not provided
+      upperBound = upperBound || Number.MAX_VALUE; // Default upperbound to max value if not provided
 
       return product.extra && product.extra.AGA && product.extra.AGA.VOL &&
-        Number(product.extra.AGA.VOL) >= lowerbound && Number(product.extra.AGA.VOL) <= upperbound;
+        Number(product.extra.AGA.VOL) >= lowerBound && Number(product.extra.AGA.VOL) <= upperBound;
     }
 
     filterByName(product: ProductWithCategory, name: string): boolean {
@@ -110,6 +121,8 @@ export class TableComponent implements OnInit {
       return !price || (product.extra && product.extra.AGA && product.extra.AGA.PRI && Number(product.extra.AGA.PRI) >= price);
     }
     toggleInStockFilter(){
+      this.showOnlyInStock = !this.showOnlyInStock;
+      this.applyFilters();
   }
     intersectArrays(...arrays: ProductWithCategory[][]): ProductWithCategory[] {
     // Intersect arrays to get the common elements

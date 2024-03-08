@@ -13,11 +13,10 @@ thead {
 }th {
   cursor: pointer;
   user-select: none;
-  width: 300px;
+  width: 250px;
 }
-th:nth-child(6){
+th:nth-child(1),th:nth-child(6){
   width: 400px; 
-
 }
 .viewport {
     height: 1000px;
