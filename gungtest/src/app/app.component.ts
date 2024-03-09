@@ -22,8 +22,8 @@ export class AppComponent implements OnInit {
   numberOfRandomProducts = 5;
 
   constructor(private productService: ProductService, private categoryService: CategoryService) {
-    this.categories = this.categoryService.getCategories();
-    //this.categories = this.categoryService.getAlotOfCategories();
+    //this.categories = this.categoryService.getCategories();
+    this.categories = this.categoryService.getAlotOfCategories();
   }
   ngOnInit() {
     this.categories.subscribe(categories => {
@@ -42,9 +42,6 @@ export class AppComponent implements OnInit {
     this.productService.getProduct(category.id).subscribe(product => {
         if (product != null){
           this.prod = { ...product, categoryId: parentCategory,categoryName: categoryNames };
-          this.products.push(this.prod);
-          this.products.push(this.prod);
-          this.products.push(this.prod);
           this.products.push(this.prod);
         }
         else{

@@ -46,6 +46,7 @@
             <span *ngIf="sortingStates['category'] === 'ascending'">&#x25B2;</span>
             <span *ngIf="sortingStates['category'] === 'descending'">&#x25BC;</span>
             <input type="text" class="search-click" placeholder="" id="categoryFilter" [(ngModel)]="categoryFilter" (input)="applyFilters()" (click)="$event.stopPropagation()">
+            <button class="apply-filters" (click)="clearFilters($event)">Clear</button>
           </th>
         </tr>
       </thead>
@@ -111,7 +112,8 @@
             <span *ngIf="sortingStates['category'] === 'ascending'">&#x25B2;</span>
             <span *ngIf="sortingStates['category'] === 'descending'">&#x25BC;</span>
             <input type="text" class="search-click" placeholder="" id="categoryFilter" [(ngModel)]="categoryFilter" (click)="$event.stopPropagation()">
-            <button class="apply-filters" (click)="filterButton($event)">Apply Filters</button>
+            <button class="apply-filters" (click)="clearFilters($event)">Clear</button>
+            <button class="apply-filters" (click)="filterButton($event)">Apply</button>
           </th>
           
         </tr>

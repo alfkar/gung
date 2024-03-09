@@ -1,33 +1,35 @@
 
 .table-container {
-  /* Ensure that the table container has a fixed height and overflow-y set to auto for scrolling */
-  height: 1000px; /* Adjust this height as needed */
-  overflow-y: auto;
+  height: 1000px; 
+  overflow-y: hidden;
 }
-/* Set the position of the thead element to sticky */
 thead {
   position: sticky;
-  top: 0; /* Stick to the top of the table */
-  z-index: 1; /* Ensure the headers are above other content */
-  background-color: #333; /* Background color for headers */
+  top: 0; 
+  z-index: 1; 
+  background-color: #333; 
 }th {
   cursor: pointer;
   user-select: none;
   width: 250px;
 }
 th:nth-child(1),th:nth-child(6){
-  width: 400px; 
+  width: 450px; 
 }
 .viewport {
     height: 1000px;
 }
 .header-content {
-  display: inline-block; /* Display the div and button inline */
-  margin-right: 10px; /* Adjust margin as needed for spacing between elements */
+  display: inline-block; 
+  margin-right: 10px; 
 }
 .form-check,
 .form-switch{
   width: auto;
+}
+
+.cdk-virtual-scroll-content-wrapper{
+  position: fixed;
 }
 .apply-filters {
   font-size: 14px;
@@ -39,13 +41,12 @@ th:nth-child(1),th:nth-child(6){
   letter-spacing: 0.05em;
   line-height: 1.5em;
   text-transform: uppercase;
-  margin-right: 1em;
   float: right;
-  background-color: #e48b00; /* Green color */
+  background-color: #e48b00;
   color: black;
-  margin-right: 20px;
+  margin-right: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -58,7 +59,7 @@ th:nth-child(1),th:nth-child(6){
   background-image: url('../../assets/filter.png');
   background-size: 16px;
   background-position: center;
-  background-repeat: no-repeat; /* Prevent the background image from repeating */
+  background-repeat: no-repeat; 
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -66,7 +67,7 @@ th:nth-child(1),th:nth-child(6){
 }
 .popup {
   position: absolute;
-  top: 30px; /* Adjust as needed */
+  top: 30px; 
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
@@ -82,10 +83,10 @@ th:nth-child(1),th:nth-child(6){
   border: 1px solid #ccc;
   outline: none;
   border-radius: 13px;
-  width: 100%; /* Adjust width as needed */
+  width: 100%; 
   height: 30px;
   padding-left: 7px;
-  margin-bottom: 10px; /* Adjust margin as needed */
+  margin-bottom: 10px; 
 }
 
 
@@ -109,9 +110,8 @@ th:nth-child(1),th:nth-child(6){
 .search-click:hover,
 .search-click:focus,
 input:not(.volume-range):not(.form-check-input):not(:placeholder-shown) {
-  width: 150px; /* Ensure the width stays expanded */
+  width: 150px; 
 }
-
 .search-click {
   position: relative;
   overflow: hidden;
@@ -122,8 +122,8 @@ input:not(.volume-range):not(.form-check-input):not(:placeholder-shown) {
   border: 1px solid #ccc;
   outline: none;
   position: absolute;
-  width: calc(100% - 30px); /* Adjust as needed */
+  width: calc(100% - 30px); 
   height: 20px;
-  left: 30px; /* Adjust as needed */
-  top: 5px; /* Adjust as needed */
+  left: 30px; 
+  top: 5px; 
 }

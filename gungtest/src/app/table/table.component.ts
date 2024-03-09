@@ -22,20 +22,20 @@ export class TableComponent implements OnInit {
   categoryFilter: string = '';
   nameFilter: string = '';
   idFilter: string = '';
-  priceFilter: number;
+  priceFilter: number | null = null;
   showOnlyInStock: boolean = false;
   showPopup: boolean = false;
-  lowerBound: number;
-  upperBound: number;
+  lowerBound: number | null = null;
+  upperBound: number | null = null;
   aLotOfData: boolean = false;
-  threshold: number = 1000;
+  threshold: number = 5100;
   constructor() {}
 
   ngOnInit() {
     this.defaultState = [...this.products];
     console.log('Received products:', this.products);
     this.initializeSortingStates(); // Initialize sorting states
-    if(this.defaultState.length > this.threshold){
+    if(this.defaultState.length >= this.threshold){
       this.aLotOfData = true;
     }
   }
@@ -44,95 +44,100 @@ export class TableComponent implements OnInit {
     event.stopPropagation(); // Stop the propagation of the click event
     this.showPopup = !this.showPopup;
   }
+  /*
+  Helper methods to stop button events affecting each other
+  */
   filterButton(event: Event){
     event.stopPropagation();
     this.applyFilters();
   }
-  onKeyDown(event: KeyboardEvent) {
-    console.log("PressedKey: {}",event.key);
-    if (event.key === 'Enter') { // Replace 'Enter' with your desired key
-      this.applyFilters(); // Call your button click function here
-    }
-  }
-  initializeSortingStates() {
-    this.sortingStates['volume'] = 'neutral'; // Initialize volume sorting state
-    this.sortingStates['stock'] = 'neutral'; // Initialize stock sorting state
-    this.sortingStates['category'] = 'neutral';
-  }
-
-  clearFilters(){
+  /*
+  Clears all filters and sorting states at once.
+  */
+  clearFilters(event: Event){
+    event.stopPropagation();
     this.initializeSortingStates();
     this.categoryFilter = '';
     this.nameFilter = '';
     this.idFilter = '';
-    this.priceFilter;
+    this.priceFilter = null;
     this.showOnlyInStock = false;
     this.showPopup = false;
-    this.lowerBound;
-    this.upperBound;
+    this.lowerBound = null;
+    this.upperBound = null;
+    this.applyFilters();
   }
-    applyFilters() {
-      // Apply filters based on current filter settings
-      let filteredProducts = this.defaultState.slice(); // Copy the original products array
-      // Apply filters based on the current filter settings
-      filteredProducts = filteredProducts.filter(product =>
-        this.filterInStock(product) &&
-        this.filterByVolume(product, this.lowerBound, this.upperBound) &&
-        this.filterByName(product, this.nameFilter) &&
-        this.filterByCategory(product, this.categoryFilter) &&
-        this.filterById(product, this.idFilter) &&
-        this.filterByPrice(product, this.priceFilter)
-      );
-
-      // Update the displayed products
-      this.products = filteredProducts;
+  onKeyDown(event: KeyboardEvent) {
+    console.log("PressedKey: {}",event.key);
+    if (event.key === 'Enter') { 
+      this.applyFilters(); 
     }
-
-    filterInStock(product: ProductWithCategory): boolean {
-      return !this.showOnlyInStock || (product.extra && product.extra.AGA && Number(product.extra.AGA.LGA) > 0);
-    }
-
-    filterByVolume(product: ProductWithCategory, lowerBound: number, upperBound: number): boolean {
-      lowerBound = lowerBound || 0; // Default lowerbound to 0 if not provided
-      upperBound = upperBound || Number.MAX_VALUE; // Default upperbound to max value if not provided
-
-      return product.extra && product.extra.AGA && product.extra.AGA.VOL &&
-        Number(product.extra.AGA.VOL) >= lowerBound && Number(product.extra.AGA.VOL) <= upperBound;
-    }
-
-    filterByName(product: ProductWithCategory, name: string): boolean {
-      return !name || product.name.toLowerCase().includes(name.toLowerCase());
-    }
-
-
-    filterByCategory(product: ProductWithCategory, category: string): boolean {
-      if (!category) {
-        return true; // Return true to include all products when category is not provided
-      } else {
-        return (product.categoryName && product.categoryName.toLowerCase().includes(category.toLowerCase())) || false;
-      }
-    }
-
-    filterById(product: ProductWithCategory, id: string): boolean {
-      return !id || product.id.toLowerCase().includes(id.toLowerCase());
-    }
-
-    filterByPrice(product: ProductWithCategory, price: number): boolean {
-      return !price || (product.extra && product.extra.AGA && product.extra.AGA.PRI && Number(product.extra.AGA.PRI) >= price);
-    }
-    toggleInStockFilter(){
-      this.showOnlyInStock = !this.showOnlyInStock;
-      this.applyFilters();
   }
-    intersectArrays(...arrays: ProductWithCategory[][]): ProductWithCategory[] {
-    // Intersect arrays to get the common elements
-    if (arrays.length === 0) return [];
-    if (arrays.length === 1) return arrays[0];
-    return arrays.reduce((previous, current) =>
-      previous.filter(element => current.includes(element))
+  initializeSortingStates() {
+    this.sortingStates['volume'] = 'neutral'; 
+    this.sortingStates['stock'] = 'neutral'; 
+    this.sortingStates['category'] = 'neutral';
+  }
+  /* 
+  Applying all active filters at once.
+  Each filter has a helper method to that check filter conditions.
+  */
+  applyFilters() {
+    let filteredProducts = this.defaultState.slice(); 
+    filteredProducts = filteredProducts.filter(product =>
+      this.filterInStock(product) &&
+      this.filterByVolume(product, this.lowerBound, this.upperBound) &&
+      this.filterByName(product, this.nameFilter) &&
+      this.filterByCategory(product, this.categoryFilter) &&
+      this.filterById(product, this.idFilter) &&
+      this.filterByPrice(product, this.priceFilter)
     );
+    this.products = filteredProducts;
+  }
+/*
+* Helper methods for applying filters. 
+*/
+  filterInStock(product: ProductWithCategory): boolean {
+    return !this.showOnlyInStock || (product.extra && product.extra.AGA && Number(product.extra.AGA.LGA) > 0);
   }
 
+  filterByVolume(product: ProductWithCategory, lowerBound: number | null, upperBound: number | null): boolean {
+    lowerBound = lowerBound !== null ? lowerBound : 0;
+    upperBound = upperBound !== null ? upperBound : Number.MAX_VALUE;
+
+    return product.extra && product.extra.AGA && product.extra.AGA.VOL &&
+        Number(product.extra.AGA.VOL) >= lowerBound && Number(product.extra.AGA.VOL) <= upperBound;
+  }
+
+
+  filterByName(product: ProductWithCategory, name: string): boolean {
+    return !name || product.name.toLowerCase().includes(name.toLowerCase());
+  }
+
+
+  filterByCategory(product: ProductWithCategory, category: string): boolean {
+    if (!category) {
+      return true;
+    } else {
+      return (product.categoryName && product.categoryName.toLowerCase().includes(category.toLowerCase())) || false;
+    }
+  }
+
+  filterById(product: ProductWithCategory, id: string): boolean {
+    return !id || product.id.toLowerCase().includes(id.toLowerCase());
+  }
+
+  filterByPrice(product: ProductWithCategory, price: number | null): boolean {
+    return price === null ? true : (product.extra && product.extra.AGA && product.extra.AGA.PRI && Number(product.extra.AGA.PRI) >= price);
+}
+  toggleInStockFilter(){
+    this.showOnlyInStock = !this.showOnlyInStock;
+    this.applyFilters();
+  }
+  /*
+  Sorting method for Volume, Stock and Category
+  Uses a caching state to reset to incase the user sorts another field.
+  */
   sortProductsByVolume() {
     this.resetStates('volume');
     switch (this.sortingStates['volume']) {
@@ -192,19 +197,11 @@ export class TableComponent implements OnInit {
     }
     this.products = [...this.products];
   }
-
-
   resetStates(sortingType: string) {
     for (const key in this.sortingStates) {
       if (key !== sortingType) {
         this.sortingStates[key] = 'neutral';
       }
-    }
-  }
-
-  resetAllStates() {
-    for (const key in this.sortingStates) {
-      this.sortingStates[key] = 'neutral';
     }
   }
 }
